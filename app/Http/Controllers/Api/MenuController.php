@@ -89,4 +89,16 @@ class MenuController extends Controller
         $status = $menuItem->is_active ? 'diaktifkan' : 'dinonaktifkan';
         return response()->json(['message' => "Menu berhasil $status", 'data' => $menuItem]);
     }
+
+    // GET /api/menu/{id}/stock — cek stok real-time (publik, tanpa auth)
+    // Dipakai frontend untuk validasi sebelum tambah item ke keranjang
+    public function stock(MenuItem $menuItem): JsonResponse
+    {
+        return response()->json([
+            'id'        => $menuItem->id,
+            'name'      => $menuItem->name,
+            'stock'     => $menuItem->stock,      // null = tidak terbatas
+            'is_active' => $menuItem->is_active,
+        ]);
+    }
 }

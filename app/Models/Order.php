@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Order extends Model
 {
     protected $fillable = [
-        'order_number', 'customer_name', 'total_price', 'status', 'payment_status',
+        'order_number', 'customer_name', 'total_price',
+        'status', 'payment_status', 'payment_method',
+        'wa_reminded_at',
     ];
 
     protected $casts = [
-        'total_price' => 'integer',
+        'total_price'    => 'integer',
+        'wa_reminded_at' => 'datetime',
     ];
 
     public function items(): HasMany
@@ -20,7 +23,6 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // Generate nomor urut otomatis
     public static function generateOrderNumber(): string
     {
         $last = self::latest()->first();
