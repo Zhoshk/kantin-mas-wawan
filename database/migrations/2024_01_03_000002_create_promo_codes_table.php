@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('usage_limit')->nullable(); // total uses allowed
             $table->integer('usage_per_customer')->default(1);
             $table->integer('times_used')->default(0);
-            $table->timestamp('valid_from');
-            $table->timestamp('valid_until');
+            $table->timestamp('valid_from')->nullable();
+            $table->timestamp('valid_until')->nullable();
             $table->json('applicable_categories')->nullable(); // which categories eligible
             $table->json('applicable_items')->nullable(); // specific menu items
             $table->json('excluded_items')->nullable();
