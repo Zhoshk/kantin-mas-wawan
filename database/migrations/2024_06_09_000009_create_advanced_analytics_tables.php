@@ -31,7 +31,7 @@ return new class extends Migration
             $table->json('hour_breakdown')->nullable();
             $table->timestamps();
             
-            $table->unique(['menu_item_id', 'location_id', 'analytics_date'], 'product_analytics_unique');
+            $table->unique(['menu_item_id', 'location_id', 'analytics_date'], 'prod_analytics_unique');
         });
 
         // Customer Behavior Analytics
@@ -56,7 +56,7 @@ return new class extends Migration
             $table->decimal('predicted_ltv', 12, 2)->default(0); // lifetime value
             $table->timestamps();
             
-            $table->unique(['customer_id', 'last_calculated_at']);
+            $table->unique(['customer_id', 'last_calculated_at'], 'customer_behavior_unique');
         });
 
         // Sales Forecasting
