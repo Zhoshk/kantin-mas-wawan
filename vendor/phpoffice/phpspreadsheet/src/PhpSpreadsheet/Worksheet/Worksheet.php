@@ -569,14 +569,14 @@ class Worksheet
     /**
      * Get a chart by its index position.
      *
-     * @param null|int|string $index Chart index position
+     * @param ?string $index Chart index position
      *
      * @return Chart|false
      */
-    public function getChartByIndex(null|int|string $index)
+    public function getChartByIndex(?string $index)
     {
         $chartCount = count($this->chartCollection);
-        if ($chartCount === 0 || (is_string($index) && $index !== (string) (int) $index)) {
+        if ($chartCount == 0) {
             return false;
         }
         if ($index === null) {
@@ -796,8 +796,7 @@ class Worksheet
             $this->activePane = $holdActivePane;
         }
         if ($activeSheet !== null && $activeSheet >= 0) {
-            // Not sure what PhpStan doesn't like about next stmt
-            $this->getParent()?->setActiveSheetIndex($activeSheet); // @phpstan-ignore-line
+            $this->getParent()?->setActiveSheetIndex($activeSheet);
         }
         $this->setSelectedCells($selectedCells);
 

@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\StreamOutput;
  * StreamOutput used exclusively for interactive terminal UI rendering.
  *
  * This writes to the same underlying stream as the shell output, but bypasses
- * ShellOutput-specific behaviors like visible-output tracking.
+ * ShellOutput-specific behaviors like visible-output listeners.
  */
 class TerminalOutput extends StreamOutput
 {

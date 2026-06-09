@@ -351,17 +351,12 @@ class PendingRequest
 
         $this->asMultipart();
 
-        $file = [
+        $this->pendingFiles[] = array_filter([
             'name' => $name,
             'contents' => $contents,
             'headers' => $headers,
-        ];
-
-        if ($filename !== null) {
-            $file['filename'] = $filename;
-        }
-
-        $this->pendingFiles[] = $file;
+            'filename' => $filename,
+        ]);
 
         return $this;
     }

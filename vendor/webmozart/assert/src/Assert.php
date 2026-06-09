@@ -62,7 +62,7 @@ class Assert
      * @psalm-assert non-empty-string $value
      * @param string|callable():string $message
      *
-     * @return non-empty-string
+     * @psalm-return non-empty-string
      *
      * @throws InvalidArgumentException
      */
@@ -124,7 +124,7 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @return positive-int
+     * @psalm-return positive-int
      *
      * @throws InvalidArgumentException
      */
@@ -148,7 +148,7 @@ class Assert
      * @psalm-assert non-negative-int $value
      * @param string|callable():string $message
      *
-     * @return non-negative-int
+     * @psalm-return non-negative-int
      *
      * @throws InvalidArgumentException
      */
@@ -172,7 +172,7 @@ class Assert
      * @psalm-assert negative-int $value
      * @param string|callable():string $message
      *
-     * @return negative-int
+     * @psalm-return negative-int
      *
      * @throws InvalidArgumentException
      */
@@ -242,7 +242,7 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @return positive-int|0
+     * @psalm-return positive-int|0
      *
      * @throws InvalidArgumentException
      */
@@ -328,11 +328,11 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @psalm-assert object|class-string $value
+     * @psalm-assert object|string $value
      *
      * @param string|callable():string $message
      *
-     * @return object|class-string
+     * @psalm-return object|string
      *
      * @throws InvalidArgumentException
      */
@@ -366,7 +366,7 @@ class Assert
      *
      * @see https://www.php.net/manual/en/function.get-resource-type.php
      *
-     * @return resource
+     * @psalm-return resource
      *
      * @throws InvalidArgumentException
      */
@@ -537,7 +537,7 @@ class Assert
      * @psalm-assert T $value
      *
      * @param string|callable():string $message
-     * @param class-string<T> $class
+     * @psalm-param class-string<T> $class
      *
      * @return T
      *
@@ -565,7 +565,9 @@ class Assert
      * @psalm-assert object $value
      *
      * @param string|callable():string $message
-     * @param class-string<T> $class
+     * @psalm-param class-string<T> $class
+     *
+     * @return !T
      *
      * @throws InvalidArgumentException
      */
@@ -590,7 +592,7 @@ class Assert
      *
      * @psalm-assert T $value
      *
-     * @param iterable<class-string<T>> $classes
+     * @param T $value
      * @param string|callable():string $message
      *
      * @return T
@@ -620,7 +622,7 @@ class Assert
     /**
      * @template T
      *
-     * @psalm-assert object|class-string $value
+     * @psalm-assert T $value
      *
      * @param T $value
      * @param string|callable():string $message
@@ -657,9 +659,8 @@ class Assert
      * @psalm-assert T|class-string<T> $value
      *
      * @param string|callable():string $message
-     * @param class-string<T> $class
      *
-     * @return T|class-string<T>
+     * @return T
      *
      * @throws InvalidArgumentException
      */
@@ -689,7 +690,7 @@ class Assert
      * @param T $value
      * @param string|callable():string $message
      *
-     * @return object|class-string
+     * @return T
      *
      * @throws InvalidArgumentException
      */
@@ -713,14 +714,11 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @psalm-assert T $value
-     *
-     * @template T as object
-     *
-     * @param array<class-string<T>> $classes
+     * @param object|string $value
+     * @param string[]      $classes
      * @param string|callable():string $message
+     * @psalm-param array<class-string> $classes
      *
-     * @return T
      * @throws InvalidArgumentException
      */
     public static function isAnyOf(mixed $value, mixed $classes, string|callable $message = ''): object|string
@@ -751,7 +749,7 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @return empty
+     * @psalm-return empty
      *
      * @throws InvalidArgumentException
      */
@@ -774,6 +772,8 @@ class Assert
      * @psalm-assert !empty $value
      *
      * @param string|callable():string $message
+     *
+     * @psalm-return !empty
      *
      * @throws InvalidArgumentException
      */
@@ -819,9 +819,8 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @template T
-     * @param T|null $value
-     * @return T
+     * @psalm-return !null
+     *
      * @throws InvalidArgumentException
      */
     public static function notNull(mixed $value, string|callable $message = ''): mixed
@@ -887,9 +886,6 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @template T
-     * @param T|false $value
-     * @return T
      * @throws InvalidArgumentException
      */
     public static function notFalse(mixed $value, string|callable $message = ''): mixed
@@ -908,7 +904,7 @@ class Assert
      * @psalm-pure
      *
      * @param string|callable():string $message
-     * @param string $value
+     * @psalm-param string $value
      *
      * @throws InvalidArgumentException
      */
@@ -931,7 +927,7 @@ class Assert
      * @psalm-pure
      *
      * @param string|callable():string $message
-     * @param string $value
+     * @psalm-param string $value
      *
      * @throws InvalidArgumentException
      */
@@ -954,7 +950,7 @@ class Assert
      * @psalm-pure
      *
      * @param string|callable():string $message
-     * @param string $value
+     * @psalm-param string $value
      *
      * @throws InvalidArgumentException
      */
@@ -977,7 +973,7 @@ class Assert
      * @psalm-pure
      *
      * @param string|callable():string $message
-     * @param string $value
+     * @psalm-param string $value
      *
      * @throws InvalidArgumentException
      */
@@ -999,8 +995,6 @@ class Assert
     /**
      * Does non-strict comparisons on the items, so ['3', 3] will not pass the assertion.
      * Note: objects with identical properties are also considered equal.
-     *
-     * @psalm-assert array $values
      *
      * @param string|callable():string $message
      *
@@ -1653,8 +1647,6 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @return lowercase-string
-     *
      * @throws InvalidArgumentException
      */
     public static function lower(mixed $value, string|callable $message = ''): string
@@ -1680,7 +1672,7 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @psalm-assert string $value
+     * @psalm-assert !lowercase-string $value
      *
      * @param string|callable():string $message
      *
@@ -1919,8 +1911,6 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @return class-string
-     *
      * @throws InvalidArgumentException
      */
     public static function classExists(mixed $value, string|callable $message = ''): string
@@ -1974,8 +1964,6 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @return class-string
-     *
      * @throws InvalidArgumentException
      */
     public static function interfaceExists(mixed $value, string|callable $message = ''): string
@@ -2000,10 +1988,9 @@ class Assert
      *
      * @psalm-assert class-string<ExpectedType>|ExpectedType $value
      *
+     * @param class-string<ExpectedType>|ExpectedType $value
      * @param class-string<ExpectedType> $interface
      * @param string|callable():string $message
-     *
-     * @return class-string<ExpectedType>|ExpectedType
      *
      * @throws InvalidArgumentException
      */
@@ -2053,11 +2040,10 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @template T as class-string|object
-     * @param T $classOrObject
+     * @param string|object $classOrObject
      * @param string|callable():string $message
+     * @psalm-param class-string|object $classOrObject
      *
-     * @return T
      * @throws InvalidArgumentException
      */
     public static function propertyNotExists(mixed $classOrObject, mixed $property, string|callable $message = ''): mixed
@@ -2076,11 +2062,10 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @template T as class-string|object
-     * @param T $classOrObject
+     * @param string|object $classOrObject
      * @param string|callable():string $message
+     * @psalm-param class-string|object $classOrObject
      *
-     * @return T
      * @throws InvalidArgumentException
      */
     public static function methodExists(mixed $classOrObject, mixed $method, string|callable $message = ''): object|string
@@ -2101,11 +2086,10 @@ class Assert
     /**
      * @psalm-pure
      *
-     * @template T as class-string|object
-     * @param T $classOrObject
+     * @param string|object $classOrObject
      * @param string|callable():string $message
+     * @psalm-param class-string|object $classOrObject
      *
-     * @return T
      * @throws InvalidArgumentException
      */
     public static function methodNotExists(mixed $classOrObject, mixed $method, string|callable $message = ''): mixed
@@ -2293,7 +2277,7 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @return list<mixed>
+     * @psalm-return list<mixed>
      *
      * @throws InvalidArgumentException
      */
@@ -2316,7 +2300,7 @@ class Assert
      *
      * @param string|callable():string $message
      *
-     * @return non-empty-list<mixed>
+     * @psalm-return non-empty-list<mixed>
      *
      * @throws InvalidArgumentException
      */
@@ -2357,7 +2341,9 @@ class Assert
     }
 
     /**
-     * @param callable $callable
+     * @psalm-assert callable $callable
+     *
+     * @param Closure|callable $callable
      * @param string|callable():string $message
      *
      * @return Closure|callable-string
@@ -2383,7 +2369,9 @@ class Assert
     }
 
     /**
-     * @param callable $callable
+     * @psalm-assert callable $callable
+     *
+     * @param Closure|callable $callable
      * @param string|callable():string $message
      *
      * @return Closure|callable-string
@@ -2419,7 +2407,7 @@ class Assert
      * @param array<string, T> $array
      * @param string|callable():string $message
      *
-     * @return non-empty-array<string, T>
+     * @return array<string, T>
      *
      * @throws InvalidArgumentException
      */
@@ -2463,13 +2451,8 @@ class Assert
     }
 
     /**
-     * @template T as callable
-     *
-     * @param T $expression
      * @param string|callable():string $message
-     * @param class-string<Throwable> $class
-     *
-     * @return T
+     * @psalm-param class-string<Throwable> $class
      *
      * @throws InvalidArgumentException
      */

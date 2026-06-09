@@ -2,6 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Reader;
 
+use Closure;
 use PhpOffice\PhpSpreadsheet\Cell\IValueBinder;
 use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 use PhpOffice\PhpSpreadsheet\Reader\Exception as ReaderException;
@@ -9,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Reader\Security\XmlScanner;
 use PhpOffice\PhpSpreadsheet\Shared\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-abstract class BaseReader implements IReader2
+abstract class BaseReader implements IReader
 {
     /**
      * Read data only?
@@ -80,8 +81,8 @@ abstract class BaseReader implements IReader2
 
     protected ?IValueBinder $valueBinder = null;
 
-    /** @var null|callable(string):bool function to return whether image path is okay */
-    protected $isWhitelisted;
+    /** @var null|Closure(string):bool function to return whether image path is okay */
+    protected ?Closure $isWhitelisted = null;
 
     public function __construct()
     {
@@ -210,9 +211,9 @@ abstract class BaseReader implements IReader2
      * supplying a method which might return true
      * can subject the caller to security exploits.
      *
-     * @param callable(string):bool $isWhitelisted
+     * @param Closure(string):bool $isWhitelisted
      */
-    public function setIsWhitelisted(callable $isWhitelisted): static
+    public function setIsWhitelisted(Closure $isWhitelisted): static
     {
         $this->isWhitelisted = $isWhitelisted;
 

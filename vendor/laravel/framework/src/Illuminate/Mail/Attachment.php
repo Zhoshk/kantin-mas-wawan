@@ -7,9 +7,7 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
-use InvalidArgumentException;
 use RuntimeException;
 
 class Attachment
@@ -66,10 +64,6 @@ class Attachment
      */
     public static function fromUrl($url)
     {
-        if (! Str::isUrl($url, ['http', 'https'])) {
-            throw new InvalidArgumentException('Attachment URLs must use the http or https scheme.');
-        }
-
         return static::fromPath($url);
     }
 

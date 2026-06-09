@@ -2,6 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Reader;
 
+use Closure;
 use Composer\Pcre\Preg;
 use DateTime;
 use DateTimeZone;
@@ -281,7 +282,6 @@ class Ods extends BaseReader
      *      textRotation?: int,
      *      vertical?: string,
      *      wrapText?: bool,
-     *      indent?: int,
      *    },
      *    protection?:array{
      *      locked?: string,
@@ -1511,11 +1511,11 @@ class Ods extends BaseReader
         }
     }
 
-    /** @var null|callable(string, string):string format callback routine */
-    private $formatCallback;
+    /** @var null|Closure(string, string):string */
+    private ?Closure $formatCallback = null;
 
-    /** @param callable(string, string):string $formatCallback format callback routine */
-    public function setFormatCallback(callable $formatCallback): void
+    /** @param Closure(string, string):string $formatCallback */
+    public function setFormatCallback(Closure $formatCallback): void
     {
         $this->formatCallback = $formatCallback;
     }
@@ -1650,7 +1650,6 @@ class Ods extends BaseReader
     /** @return array{
      *   horizontal?: string,
      *   readOrder?: int,
-     *   indent?: int,
      * }
      */
     protected function getAlignment2Styles(DOMElement $paragraphProperties, string $styleNs, string $fontNs): array

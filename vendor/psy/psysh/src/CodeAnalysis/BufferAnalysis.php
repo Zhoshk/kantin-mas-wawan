@@ -93,10 +93,6 @@ class BufferAnalysis
 
         foreach ($this->tokens as $token) {
             if (\is_array($token)) {
-                if (\in_array($token[0], [\T_CURLY_OPEN, \T_DOLLAR_OPEN_CURLY_BRACES], true)) {
-                    $stack[] = '{';
-                }
-
                 continue;
             }
 
