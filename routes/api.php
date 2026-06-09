@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\AnalyticsController;
 
 // Menu
 Route::get('/menu', [MenuController::class, 'index']);
+<<<<<<< HEAD
 Route::get('/menu/{menuItem}/stock', [MenuController::class, 'stock']);
 Route::get('/menu-items/{menuItemId}/reviews', [ReviewController::class, 'index']);
 
@@ -54,23 +55,37 @@ Route::get('/cutoff', function () {
         'server_time' => $now->format('H:i'),
     ]);
 });
+=======
+
+// Buat pesanan baru
+Route::post('/orders', [OrderController::class, 'store']);
+>>>>>>> parent of 16458a8 (feat: stock validation, GoFood-style UI, admin panel improvements)
 
 
 // ── ADMIN ───────────────────────────────────────────────────────────────
+// Proteksi sederhana pakai middleware admin_key (cek header X-Admin-Key)
+
 Route::middleware('admin.key')->prefix('admin')->group(function () {
 
     // Menu CRUD
-    Route::get('/menu',               [MenuController::class, 'adminIndex']);
-    Route::post('/menu',              [MenuController::class, 'store']);
-    Route::get('/menu/{menuItem}',    [MenuController::class, 'show']);
-    Route::put('/menu/{menuItem}',    [MenuController::class, 'update']);
-    Route::delete('/menu/{menuItem}', [MenuController::class, 'destroy']);
+    Route::get('/menu',              [MenuController::class, 'adminIndex']);
+    Route::post('/menu',             [MenuController::class, 'store']);
+    Route::get('/menu/{menuItem}',   [MenuController::class, 'show']);
+    Route::put('/menu/{menuItem}',   [MenuController::class, 'update']);
+    Route::delete('/menu/{menuItem}',[MenuController::class, 'destroy']);
     Route::patch('/menu/{menuItem}/toggle', [MenuController::class, 'toggle']);
 
+<<<<<<< HEAD
     // Orders
     Route::get('/orders',                  [OrderController::class, 'index']);
     Route::get('/orders/{order}',          [OrderController::class, 'show']);
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus']);
+=======
+    // Pesanan
+    Route::get('/orders',                    [OrderController::class, 'index']);
+    Route::get('/orders/{order}',            [OrderController::class, 'show']);
+    Route::patch('/orders/{order}/status',   [OrderController::class, 'updateStatus']);
+>>>>>>> parent of 16458a8 (feat: stock validation, GoFood-style UI, admin panel improvements)
 
     // Reviews
     Route::get('/reviews', [ReviewController::class, 'adminIndex']);

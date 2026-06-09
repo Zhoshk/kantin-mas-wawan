@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Order extends Model
 {
     protected $fillable = [
+<<<<<<< HEAD
         'order_number', 'customer_name', 'customer_id', 'promo_code_id', 'promo_code_used',
         'total_price', 'subtotal', 'discount_amount', 'loyalty_points_used', 'loyalty_points_earned',
         'delivery_fee', 'service_fee', 'tax_amount', 'status', 'payment_status', 'payment_method',
@@ -35,6 +36,13 @@ class Order extends Model
         'cancelled_at' => 'datetime',
         'wa_reminded_at' => 'datetime',
         'estimated_preparation_time' => 'integer',
+=======
+        'order_number', 'customer_name', 'total_price', 'status', 'payment_status',
+    ];
+
+    protected $casts = [
+        'total_price' => 'integer',
+>>>>>>> parent of 16458a8 (feat: stock validation, GoFood-style UI, admin panel improvements)
     ];
 
     public function items(): HasMany
@@ -42,6 +50,7 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+<<<<<<< HEAD
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -67,12 +76,16 @@ class Order extends Model
         return $this->hasMany(Review::class);
     }
 
+=======
+    // Generate nomor urut otomatis
+>>>>>>> parent of 16458a8 (feat: stock validation, GoFood-style UI, admin panel improvements)
     public static function generateOrderNumber(): string
     {
         $last = self::latest()->first();
         $next = $last ? ((int) substr($last->order_number, 4)) + 1 : 1;
         return 'ORD-' . str_pad($next, 3, '0', STR_PAD_LEFT);
     }
+<<<<<<< HEAD
 
     // Calculate estimated preparation time based on items
     public function calculateEstimatedTime(): int
@@ -101,3 +114,6 @@ class Order extends Model
         return $query->where('order_type', $type);
     }
 }
+=======
+}
+>>>>>>> parent of 16458a8 (feat: stock validation, GoFood-style UI, admin panel improvements)
