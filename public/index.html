@@ -1508,14 +1508,430 @@
       cursor: pointer;
       margin-top: 12px;
     }
+  
+    /* ── INFO BAYAR CARD ────────────────────────────────── */
+    .info-bayar-card {
+      background: #fffbeb;
+      border: 2px solid #fde68a;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .info-bayar-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+    .info-bayar-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #92400e;
+      margin-bottom: 4px;
+    }
+    .info-bayar-desc {
+      font-size: 11px;
+      color: #78350f;
+      line-height: 1.5;
+    }
+
+    /* ── QR MINI ────────────────────────────────────────── */
+    .qris-mini-wrap {
+      background: var(--gray);
+      border: 1.5px solid var(--gray2);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .qris-mini-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text2);
+    }
+    .qris-mini-hint {
+      font-size: 10px;
+      color: var(--text2);
+      line-height: 1.4;
+    }
+  
+    /* ── MODE SELECTOR (Home) ───────────────────────────── */
+    .mode-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px 16px;
+      flex: 1;
+      justify-content: center;
+    }
+    .mode-card {
+      background: white;
+      border: 2px solid var(--gray2);
+      border-radius: 20px;
+      padding: 20px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-align: left;
+    }
+    .mode-card:hover { border-color: var(--red); box-shadow: 0 4px 20px rgba(218,41,28,0.1); }
+    .mode-card:active { transform: scale(0.98); }
+    .mode-card.mode-kantin { border-color: var(--yellow); background: #fffbeb; }
+    .mode-card.mode-kantin:hover { border-color: #f59e0b; }
+    .mode-card.mode-luar { border-color: #bfdbfe; background: #eff6ff; }
+    .mode-card.mode-luar:hover { border-color: #3b82f6; }
+    .mode-icon { font-size: 40px; flex-shrink: 0; }
+    .mode-info {}
+    .mode-title { font-size: 17px; font-weight: 900; color: var(--dark); margin-bottom: 4px; }
+    .mode-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+    .mode-badge {
+      margin-top: 6px;
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .badge-yellow { background: var(--yellow); color: var(--dark); }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+
+    /* ── SCREEN ORDER LUAR ──────────────────────────────── */
+    .ext-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .ext-closed-banner {
+      background: #fef2f2;
+      border: 2px solid #fca5a5;
+      border-radius: 12px;
+      padding: 12px 16px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #dc2626;
+      display: none;
+    }
+    .ext-closed-banner.show { display: block; }
+    .ext-form-group { display: flex; flex-direction: column; gap: 6px; }
+    .ext-label { font-size: 12px; font-weight: 800; color: var(--text2); }
+    .ext-input, .ext-textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid var(--gray2);
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .ext-input:focus, .ext-textarea:focus { border-color: #3b82f6; }
+    .ext-input.error, .ext-textarea.error { border-color: var(--red); background: var(--red-light); }
+    .ext-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .ext-hint { font-size: 11px; color: var(--text2); line-height: 1.4; }
+    .ext-cutoff-info {
+      background: #fef3c7;
+      border: 1.5px solid #fde68a;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 11px;
+      color: #92400e;
+      font-weight: 700;
+    }
+    .ext-submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #2563eb;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ext-submit-btn:hover { background: #1d4ed8; }
+    .ext-submit-btn:disabled { background: var(--gray3); cursor: not-allowed; }
+
+    /* ── SCREEN SUCCESS LUAR ────────────────────────────── */
+    .ext-success-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .ext-success-icon { font-size: 80px; margin-bottom: 16px; animation: bounce 0.6s ease; }
+    .ext-order-box {
+      background: #eff6ff;
+      border: 2px solid #bfdbfe;
+      border-radius: var(--radius);
+      padding: 16px 28px;
+      margin: 16px 0;
+    }
+    .ext-order-box small { display: block; font-size: 11px; font-weight: 700; color: #1d4ed8; margin-bottom: 4px; }
+    .ext-order-box span { font-size: 24px; font-weight: 900; color: #1e40af; }
+    .ext-info-box {
+      background: var(--gray);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.6;
+      width: 100%;
+      text-align: left;
+    }
+    .ext-new-btn {
+      width: 100%;
+      padding: 16px;
+      background: #2563eb;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+    }
+  
+    /* ── MODE SELECTOR (Home) ───────────────────────────── */
+    .mode-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px;
+      flex-shrink: 0;
+    }
+    .mode-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border: 2px solid var(--gray2);
+      border-radius: 16px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .mode-card:hover { border-color: var(--red); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(218,41,28,0.1); }
+    .mode-card:active { transform: scale(0.98); }
+    .mode-card.mode-kantin { border-color: var(--red); background: #fff5f4; }
+    .mode-card-icon { font-size: 36px; flex-shrink: 0; }
+    .mode-card-info { flex: 1; }
+    .mode-card-title { font-size: 16px; font-weight: 900; color: var(--dark); }
+    .mode-card-desc { font-size: 12px; color: var(--text2); margin-top: 3px; line-height: 1.4; }
+    .mode-card-badge {
+      background: var(--red);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 50px;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .mode-card-badge.badge-green { background: var(--green); }
+    .mode-card-arrow { font-size: 20px; color: var(--gray3); flex-shrink: 0; }
+
+    /* ── SCREEN ORDER LUAR ──────────────────────────────── */
+    .ext-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .ext-cutoff-banner {
+      background: #fef3c7;
+      border: 2px solid #fde68a;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #92400e;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .ext-cutoff-banner.show { display: flex; }
+
+    .ext-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text2);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .ext-input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid var(--gray2);
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .ext-input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(218,41,28,0.1); }
+    .ext-input.error { border-color: var(--red); background: var(--red-light); }
+    .ext-textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid var(--gray2);
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      outline: none;
+      resize: none;
+      min-height: 100px;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+      line-height: 1.6;
+    }
+    .ext-textarea:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(218,41,28,0.1); }
+    .ext-textarea.error { border-color: var(--red); background: var(--red-light); }
+    .ext-textarea-hint {
+      font-size: 10px;
+      color: var(--text2);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .ext-price-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 2px solid var(--gray2);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .ext-price-wrap:focus-within { border-color: var(--red); }
+    .ext-price-prefix {
+      background: var(--gray);
+      padding: 13px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text2);
+      flex-shrink: 0;
+    }
+    .ext-price-input {
+      flex: 1;
+      border: none;
+      padding: 13px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      outline: none;
+      background: white;
+    }
+    .ext-info-card {
+      background: #eff6ff;
+      border: 2px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 11px;
+      color: #1e40af;
+      line-height: 1.5;
+    }
+    .ext-submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--red);
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ext-submit-btn:disabled { background: var(--gray3); cursor: not-allowed; }
+    .ext-submit-btn:active { transform: scale(0.98); }
+
+    /* ── SUCCESS ORDER LUAR ─────────────────────────────── */
+    .ext-success-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .ext-order-box {
+      background: #eff6ff;
+      border: 2px solid #bfdbfe;
+      border-radius: 16px;
+      padding: 16px 24px;
+      margin: 16px 0;
+      width: 100%;
+    }
+    .ext-order-box small { font-size: 11px; font-weight: 700; color: #3b82f6; display: block; margin-bottom: 4px; }
+    .ext-order-num { font-size: 24px; font-weight: 900; color: var(--dark); }
+    .ext-order-restaurant { font-size: 13px; color: var(--text2); margin-top: 6px; }
   </style>
 </head>
 
 <body>
   <div class="app">
 
+    <!-- SCREEN 0: HOME — pilih mode -->
+    <div class="screen active" id="screen-home">
+      <div class="hero-banner" style="flex-shrink:0">
+        <div class="hero-top">
+          <div class="brand">
+            <div class="brand-logo">KK</div>
+            <div class="brand-info">
+              <h1>Kantin Kejujuran</h1>
+              <p>📍 Lantai 5 — Gade Tower IT Security</p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-tagline">Halo, <br><span>Mau Pesan Apa?</span></div>
+      </div>
+      <div class="mode-selector">
+        <div class="mode-card mode-kantin" onclick="goMode('kantin')">
+          <div class="mode-icon">🏪</div>
+          <div class="mode-info">
+            <div class="mode-title">Kantin Kejujuran</div>
+            <div class="mode-desc">Snack & minuman yang tersedia di kantin. Ambil dan bayar langsung ke Mas Wawan.</div>
+            <span class="mode-badge badge-yellow">⏰ Buka sampai jam <span id="home-kantin-cutoff">11.00</span></span>
+          </div>
+        </div>
+        <div class="mode-card mode-luar" onclick="goMode('luar')">
+          <div class="mode-icon">🍱</div>
+          <div class="mode-info">
+            <div class="mode-title">Order Makanan Luar</div>
+            <div class="mode-desc">Pesan makanan dari restoran atau warung luar. Mas Wawan yang belikan.</div>
+            <span class="mode-badge badge-blue">⏰ Order sebelum jam <span id="home-ext-cutoff">10.00</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- SCREEN 1: MENU -->
-    <div class="screen active" id="screen-menu">
+    <div class="screen" id="screen-menu">
       <div class="hero-banner">
         <div class="hero-top">
           <div class="brand">
@@ -1525,6 +1941,7 @@
               <p>📍 Lantai 5 — Gade Tower IT Security</p>
             </div>
           </div>
+          <button onclick="toggleModeSelector()" title="Order Makanan Luar" style="width:40px;height:40px;background:rgba(255,255,255,0.25);border:none;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0;">🍱</button>
           <button class="cart-btn" onclick="goToCart()">
             <svg viewBox="0 0 24 24">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -1560,6 +1977,29 @@
         <button class="cat-tab" onclick="filterCat(this,'snack')">🍟 Snack</button>
         <button class="cat-tab" onclick="filterCat(this,'drink')">🥤 Minuman</button>
       </div>
+      <!-- Mode Selector -->
+      <div class="mode-selector" id="mode-selector" style="display:none;">
+        <div style="font-size:13px;font-weight:800;color:var(--text2);padding:0 0 4px;">Mau pesan apa hari ini?</div>
+        <div class="mode-card mode-kantin" onclick="hideModeSelector()">
+          <div class="mode-card-icon">🏪</div>
+          <div class="mode-card-info">
+            <div class="mode-card-title">Kantin Kejujuran</div>
+            <div class="mode-card-desc">Snack & minuman tersedia di kantin lantai 5</div>
+            <div class="mode-card-badge">Bayar di Kantin</div>
+          </div>
+          <div class="mode-card-arrow">›</div>
+        </div>
+        <div class="mode-card" onclick="goToExtOrder()">
+          <div class="mode-card-icon">🍱</div>
+          <div class="mode-card-info">
+            <div class="mode-card-title">Order Makanan Luar</div>
+            <div class="mode-card-desc">Pesan dari restoran, Mas Wawan yang belikan</div>
+            <span class="mode-card-badge badge-green" id="ext-mode-badge">⏰ Buka s/d jam 10.00</span>
+          </div>
+          <div class="mode-card-arrow">›</div>
+        </div>
+      </div>
+
       <div class="section-title" id="section-title">Menu Hari Ini</div>
 
       <div class="menu-scroll">
@@ -1592,74 +2032,59 @@
         <div class="summary-row"><span>Subtotal</span><span id="sub-total">Rp 0</span></div>
         <div class="summary-row"><span>Biaya Layanan</span><span>Gratis 🎉</span></div>
         <div class="summary-row total"><span>Total</span><span id="grand-total">Rp 0</span></div>
-        <button class="pay-btn" onclick="goToPayment()">Pilih Cara Bayar →</button>
+        <button class="pay-btn" onclick="goToPayment()">Konfirmasi Pesanan →</button>
       </div>
     </div>
 
-    <!-- SCREEN 3: PAYMENT -->
+    <!-- SCREEN 3: KONFIRMASI PESANAN (Mode 1 - Kantin) -->
     <div class="screen" id="screen-payment">
       <div class="screen-header">
         <button class="back-btn" onclick="showScreen('screen-cart');renderCart()"><svg viewBox="0 0 24 24">
             <polyline points="15 18 9 12 15 6" />
           </svg></button>
-        <div class="screen-title">Pembayaran</div>
+        <div class="screen-title">Konfirmasi Pesanan</div>
       </div>
       <div class="payment-content">
+
+        <!-- Nama pemesan -->
         <div>
           <label class="field-label">👤 Nama kamu siapa?</label>
           <input class="name-input" type="text" id="customer-name" placeholder="Tulis nama lengkap kamu..."
             maxlength="40" autocomplete="name"
             oninput="this.classList.remove('error');this.placeholder='Tulis nama lengkap kamu...'">
         </div>
-        <div>
-          <label class="field-label">💳 Mau bayar pakai apa?</label>
-          <div class="method-grid">
-            <button class="method-btn" id="btn-qris" onclick="selectPayMethod('qris')">
-              <span class="m-icon">📱</span>
-              <span class="m-name">QRIS</span>
-              <span class="m-desc">GoPay · OVO · Dana</span>
-            </button>
-            <button class="method-btn" id="btn-tunai" onclick="selectPayMethod('tunai')">
-              <span class="m-icon">💵</span>
-              <span class="m-name">Tunai</span>
-              <span class="m-desc">Bayar ke kasir</span>
-            </button>
+
+        <!-- Info cara bayar (informatif, bukan pilihan) -->
+        <div class="info-bayar-card">
+          <div class="info-bayar-icon">🏪</div>
+          <div class="info-bayar-text">
+            <div class="info-bayar-title">Bayar Langsung di Kantin</div>
+            <div class="info-bayar-desc">Setelah pesanan dikonfirmasi, ambil dan bayar langsung ke Mas Wawan menggunakan <strong>QR Merchant</strong> yang tersedia di kantin.</div>
           </div>
         </div>
-        <div class="method-detail" id="detail-qris">
-          <div class="qris-wrap">
-            <span class="qris-label">⚡ QRIS — Kantin Kejujuran</span>
-            <div
-              style="width:200px;height:200px;margin:0 auto;background:#f0f0f0;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
-              <img src="/qris.png" alt="QRIS" style="width:200px;height:200px;object-fit:contain;"
-                onerror="this.style.display='none';this.nextSibling.style.display='flex'">
-              <div
-                style="display:none;flex-direction:column;align-items:center;gap:6px;color:#aaa;font-size:11px;font-weight:700;text-align:center;padding:12px;">
-                <span style="font-size:32px">📱</span><span>Simpan QRIS ke<br><strong>public/qris.png</strong></span>
-              </div>
-            </div>
-            <div class="qris-amount" id="qris-amount">Rp 0</div>
-            <p class="qris-hint">Bayar pakai GoPay, OVO, Dana, BCA Mobile, dll</p>
-          </div>
-        </div>
-        <div class="method-detail" id="detail-tunai">
-          <div class="tunai-card">
-            <div class="t-icon">💵</div>
-            <div class="t-title">Bayar Tunai ke Kasir</div>
-            <div class="t-amount" id="tunai-amount">Rp 0</div>
-            <div class="t-hint">Tunjukkan nomor pesanan ke Mas Wawan dan bayar langsung di kasir 😊</div>
-          </div>
-        </div>
+
+        <!-- Rincian pesanan -->
         <div class="order-detail">
-          <h3>Rincian Pesanan</h3>
+          <h3>🛒 Rincian Pesanan</h3>
           <div id="payment-items"></div>
-          <div class="order-detail-item" style="border-top:1px solid var(--gray2);margin-top:8px;padding-top:8px;">
-            <span>Total Bayar</span><span id="payment-total" style="color:var(--red);font-size:13px;">Rp 0</span>
+          <div class="order-detail-item" style="border-top:1px solid var(--gray2);margin-top:8px;padding-top:10px;">
+            <span style="font-weight:800;color:var(--dark)">Total</span>
+            <span id="payment-total" style="color:var(--red);font-size:15px;font-weight:900;">Rp 0</span>
           </div>
         </div>
+
+        <!-- QR Merchant (opsional, dari file qris.png) -->
+        <div class="qris-mini-wrap" id="qris-mini-wrap">
+          <div class="qris-mini-label">📱 QR Merchant Kantin</div>
+          <img src="/qris.png" alt="QR Merchant"
+            style="width:160px;height:160px;object-fit:contain;border-radius:8px;"
+            onerror="this.parentElement.style.display='none'">
+          <div class="qris-mini-hint">Scan QR ini saat mengambil pesanan di kantin</div>
+        </div>
+
       </div>
       <div class="done-wrap">
-        <button class="done-btn" id="confirm-btn" onclick="confirmPayment()">Konfirmasi Pesanan</button>
+        <button class="done-btn" id="confirm-btn" onclick="confirmPayment()">✅ Konfirmasi Pesanan</button>
       </div>
     </div>
 
@@ -1709,6 +2134,77 @@
       </div>
     </div>
 
+    <!-- SCREEN ORDER LUAR -->
+    <div class="screen" id="screen-ext-order">
+      <div class="screen-header">
+        <button class="back-btn" onclick="showScreen('screen-home')">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="screen-title">Order Makanan Luar 🍱</div>
+      </div>
+      <div class="ext-content">
+        <div class="ext-closed-banner" id="ext-closed-banner">
+          🔒 Order makanan luar sudah ditutup<br>
+          <span style="font-size:11px;font-weight:600">Buka kembali besok sebelum jam <span id="ext-cutoff-text">10.00</span></span>
+        </div>
+        <div class="ext-cutoff-info">
+          ⏰ Order hanya bisa dilakukan <strong>sebelum jam <span id="ext-cutoff-label">10.00</span> pagi</strong>. Mas Wawan akan belikan saat jam makan siang.
+        </div>
+        <div class="ext-form-group">
+          <label class="ext-label">👤 Nama Kamu *</label>
+          <input class="ext-input" type="text" id="ext-name" placeholder="Tulis nama lengkap..." maxlength="100" autocomplete="name">
+        </div>
+        <div class="ext-form-group">
+          <label class="ext-label">🏠 Nama Restoran / Warung *</label>
+          <input class="ext-input" type="text" id="ext-restaurant" placeholder="Contoh: Warung Bu Sari, McD Blok M..." maxlength="200">
+        </div>
+        <div class="ext-form-group">
+          <label class="ext-label">📋 Daftar Pesanan *</label>
+          <textarea class="ext-textarea" id="ext-items" placeholder="Tulis satu pesanan per baris, contoh:&#10;Nasi gudeg + ayam&#10;Es teh manis&#10;Tempe goreng 2 porsi" maxlength="1000"></textarea>
+          <span class="ext-hint">💡 Tulis satu item per baris agar mudah dibaca Mas Wawan</span>
+        </div>
+        <div class="ext-form-group">
+          <label class="ext-label">💰 Estimasi Harga (opsional)</label>
+          <input class="ext-input" type="number" id="ext-price" placeholder="Contoh: 25000" min="0">
+          <span class="ext-hint">Bantu Mas Wawan menyiapkan uang yang tepat</span>
+        </div>
+        <div class="ext-form-group">
+          <label class="ext-label">📝 Catatan Tambahan (opsional)</label>
+          <input class="ext-input" type="text" id="ext-notes" placeholder="Contoh: Pedasnya sedang, jangan pakai bawang..." maxlength="500">
+        </div>
+      </div>
+      <div class="done-wrap">
+        <button class="ext-submit-btn" id="ext-submit-btn" onclick="submitExtOrder()">
+          📲 Kirim Order ke Mas Wawan
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN SUCCESS ORDER LUAR -->
+    <div class="screen" id="screen-ext-success">
+      <div class="ext-success-content">
+        <div class="ext-success-icon">🎉</div>
+        <h2 style="font-size:26px;font-weight:900;margin-bottom:8px;">Order Diterima!</h2>
+        <p style="font-size:14px;color:var(--text2);line-height:1.6;max-width:280px">
+          Mas Wawan sudah mendapat notifikasi WA. Pesananmu akan dibelikan saat jam makan siang.
+        </p>
+        <div class="ext-order-box">
+          <small>NOMOR ORDER</small>
+          <span id="ext-order-num">EXT-001</span>
+        </div>
+        <div class="ext-info-box">
+          🏠 <strong>Restoran:</strong> <span id="ext-success-resto">—</span><br>
+          👤 <strong>Pemesan:</strong> <span id="ext-success-name">—</span><br>
+          💰 <strong>Est. Harga:</strong> <span id="ext-success-price">—</span><br><br>
+          📌 Bayar ke Mas Wawan saat menerima pesanan ya!
+        </div>
+      </div>
+      <div class="done-wrap">
+        <button class="ext-new-btn" onclick="newExtOrder()">🍱 Order Lagi</button>
+        <button class="new-order-btn" style="margin-top:8px" onclick="showScreen('screen-home')">🏠 Ke Halaman Utama</button>
+      </div>
+    </div>
+
     <!-- VARIANT MODAL -->
     <!-- VARIANT PAGE — full screen GoFood style -->
     <div class="modal-overlay" id="modal-overlay">
@@ -1749,11 +2245,204 @@
     </div>
   </div>
 
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- SCREEN: ORDER MAKANAN LUAR                        -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div class="screen" id="screen-ext-order">
+      <div class="screen-header">
+        <button class="back-btn" onclick="showScreen('screen-menu')">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="screen-title">🍱 Order Makanan Luar</div>
+      </div>
+      <div class="ext-content">
+        <div class="ext-cutoff-banner" id="ext-cutoff-banner">
+          <span>🔒</span>
+          <span id="ext-cutoff-msg">Order makanan luar sudah ditutup. Buka besok sebelum jam 10.00.</span>
+        </div>
+        <div class="ext-info-card">
+          ℹ️ <strong>Cara kerja:</strong> Tulis restoran & pesananmu. Mas Wawan belikan dan antar ke ruanganmu. Bayar ke Mas Wawan saat pesanan tiba.
+        </div>
+        <div>
+          <label class="ext-section-title">👤 Nama Pemesan *</label>
+          <input class="ext-input" type="text" id="ext-name" placeholder="Nama kamu..." maxlength="60" autocomplete="name">
+        </div>
+        <div>
+          <label class="ext-section-title">🏠 Nama Restoran / Warung *</label>
+          <input class="ext-input" type="text" id="ext-restaurant" placeholder="Contoh: Warung Bu Sari, McD Sudirman..." maxlength="100">
+        </div>
+        <div>
+          <label class="ext-section-title">📋 Daftar Pesanan *</label>
+          <textarea class="ext-textarea" id="ext-items" placeholder="Tulis satu menu per baris:&#10;&#10;Nasi Gudeg + Ayam Goreng&#10;Es Teh Manis&#10;Kerupuk" maxlength="800"></textarea>
+          <div class="ext-textarea-hint">💡 Satu baris = satu item. Boleh tambah catatan spesifik per item.</div>
+        </div>
+        <div>
+          <label class="ext-section-title">📝 Catatan Tambahan <span style="font-weight:600;font-size:11px;">(opsional)</span></label>
+          <input class="ext-input" type="text" id="ext-notes" placeholder="Pedas sedang, jangan sambal, dll..." maxlength="200">
+        </div>
+        <div>
+          <label class="ext-section-title">💰 Estimasi Harga <span style="font-weight:600;font-size:11px;">(opsional)</span></label>
+          <div class="ext-price-wrap">
+            <span class="ext-price-prefix">Rp</span>
+            <input class="ext-price-input" type="number" id="ext-price" placeholder="25000" min="0" max="999999">
+          </div>
+        </div>
+      </div>
+      <div class="done-wrap">
+        <button class="ext-submit-btn" id="ext-submit-btn" onclick="submitExtOrder()">
+          📨 Kirim Order ke Mas Wawan
+        </button>
+      </div>
+    </div>
+
+    <!-- SCREEN: SUCCESS ORDER LUAR -->
+    <div class="screen" id="screen-ext-success">
+      <div class="ext-success-content">
+        <div style="font-size:72px;">🎉</div>
+        <h2 style="font-size:24px;font-weight:900;color:var(--dark);margin:12px 0 8px;">Order Terkirim!</h2>
+        <p style="font-size:14px;color:var(--text2);line-height:1.6;max-width:260px;">
+          Mas Wawan sudah dapat notifikasi WhatsApp. Pesananmu akan segera dibelikan!
+        </p>
+        <div class="ext-order-box">
+          <small>NOMOR ORDER</small>
+          <div class="ext-order-num" id="ext-order-num">EXT-001</div>
+          <div class="ext-order-restaurant" id="ext-order-restaurant"></div>
+        </div>
+        <div style="background:var(--gray);border-radius:12px;padding:12px 16px;width:100%;font-size:12px;color:var(--text2);line-height:1.8;text-align:left;">
+          <strong>📌 Selanjutnya:</strong><br>
+          1. Mas Wawan akan segera membeli pesananmu<br>
+          2. Pesanan diantar ke ruanganmu<br>
+          3. Bayar ke Mas Wawan saat menerima 💰
+        </div>
+      </div>
+      <div class="done-wrap">
+        <button class="ext-submit-btn" onclick="newExtOrder()">🍱 Order Lagi</button>
+        <button class="new-order-btn" onclick="showScreen('screen-menu')" style="margin-top:8px;">🏪 Kembali ke Kantin</button>
+      </div>
+    </div>
   <script>
     const API_BASE = '/api';
     let allMenuItems = [], cart = [], currentCat = 'all', searchQuery = '';
     let modalItem = null, selectedVariant = 0;
     let isClosed = false, lastOrderNum = null;
+    let extIsClosed = false; // state cutoff order luar
+
+    // ── MODE SELECTOR ────────────────────────────────────────────────────
+    function toggleModeSelector() {
+      const el = document.getElementById('mode-selector');
+      const isShown = el.style.display !== 'none';
+      el.style.display = isShown ? 'none' : 'flex';
+    }
+    function hideModeSelector() {
+      document.getElementById('mode-selector').style.display = 'none';
+    }
+    function goToExtOrder() {
+      hideModeSelector();
+      showScreen('screen-ext-order');
+      loadExtCutoff();
+    }
+
+    // ── EXTERNAL ORDER ───────────────────────────────────────────────────
+    async function loadExtCutoff() {
+      try {
+        const d = await apiFetch('/external-orders/cutoff');
+        extIsClosed = d.is_closed;
+        const banner = document.getElementById('ext-cutoff-banner');
+        const btn    = document.getElementById('ext-submit-btn');
+        const badge  = document.getElementById('ext-mode-badge');
+        banner.classList.toggle('show', extIsClosed);
+        if (btn) btn.disabled = extIsClosed;
+        if (badge) {
+          badge.textContent = extIsClosed
+            ? '🔒 Sudah Tutup'
+            : `⏰ Buka s/d jam ${d.cutoff_hour}.00`;
+          badge.style.background = extIsClosed ? '#ef4444' : '';
+        }
+        if (extIsClosed) {
+          document.getElementById('ext-cutoff-msg').textContent =
+            `Order makanan luar sudah ditutup hari ini. Buka kembali besok sebelum jam ${d.cutoff_hour}.00.`;
+        }
+      } catch(e) { /* fail silently */ }
+    }
+
+    async function submitExtOrder() {
+      // Validasi
+      const name       = document.getElementById('ext-name').value.trim();
+      const restaurant = document.getElementById('ext-restaurant').value.trim();
+      const items      = document.getElementById('ext-items').value.trim();
+      const notes      = document.getElementById('ext-notes').value.trim();
+      const priceRaw   = document.getElementById('ext-price').value;
+      const price      = priceRaw ? parseInt(priceRaw) : null;
+
+      let hasError = false;
+      if (!name) {
+        document.getElementById('ext-name').classList.add('error');
+        hasError = true;
+      }
+      if (!restaurant) {
+        document.getElementById('ext-restaurant').classList.add('error');
+        hasError = true;
+      }
+      if (!items) {
+        document.getElementById('ext-items').classList.add('error');
+        hasError = true;
+      }
+      if (hasError) { showNotif('⚠️ Lengkapi semua field yang wajib diisi'); return; }
+
+      if (extIsClosed) { showNotif('🔒 Order makanan luar sudah ditutup hari ini'); return; }
+
+      const btn = document.getElementById('ext-submit-btn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Mengirim order...';
+
+      try {
+        const res = await apiFetch('/external-orders', {
+          method: 'POST',
+          body: JSON.stringify({
+            customer_name:   name,
+            restaurant_name: restaurant,
+            items_text:      items,
+            notes:           notes || null,
+            estimated_price: price,
+          }),
+        });
+
+        // Tampilkan success
+        document.getElementById('ext-order-num').textContent = res.order_number;
+        document.getElementById('ext-order-restaurant').textContent =
+          '🏠 ' + (res.restaurant_name || restaurant);
+        showScreen('screen-ext-success');
+
+      } catch(e) {
+        let msg = 'Gagal mengirim order. Coba lagi.';
+        try {
+          const errData = JSON.parse(e.message.replace(/^HTTP \d+: /, ''));
+          if (errData.cutoff) {
+            msg = '🔒 Order makanan luar sudah ditutup hari ini.';
+            extIsClosed = true;
+            btn.disabled = true;
+          }
+        } catch(_) {}
+        showNotif(msg, 4000);
+        btn.disabled = false;
+        btn.textContent = '📨 Kirim Order ke Mas Wawan';
+      }
+    }
+
+    function newExtOrder() {
+      // Reset form
+      ['ext-name','ext-restaurant','ext-notes'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.value = ''; el.classList.remove('error'); }
+      });
+      const ta = document.getElementById('ext-items');
+      if (ta) { ta.value = ''; ta.classList.remove('error'); }
+      const pr = document.getElementById('ext-price');
+      if (pr) pr.value = '';
+      const btn = document.getElementById('ext-submit-btn');
+      if (btn) { btn.disabled = extIsClosed; btn.textContent = '📨 Kirim Order ke Mas Wawan'; }
+      showScreen('screen-ext-order');
+    }
 
     const fmt = n => 'Rp ' + parseInt(n).toLocaleString('id-ID');
     function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
@@ -2112,48 +2801,44 @@
     }
 
     // ── PAYMENT ──────────────────────────────────────────────────────────────
-    let selectedPayMethod = null;
+    // selectedPayMethod tidak dipakai di Mode 1 — bayar langsung di kantin
+    let selectedPayMethod = null; // kept for compatibility
     function goToPayment() {
       if (isClosed) { showNotif('Pemesanan sudah ditutup hari ini 🔒'); return; }
-      selectedPayMethod = null;
-      ['btn-qris', 'btn-tunai'].forEach(id => document.getElementById(id).classList.remove('active'));
-      ['detail-qris', 'detail-tunai'].forEach(id => document.getElementById(id).classList.remove('show'));
+      // Reset field nama
       const nameEl = document.getElementById('customer-name');
-      nameEl.classList.remove('error'); nameEl.placeholder = 'Tulis nama lengkap kamu...';
+      nameEl.classList.remove('error');
+      nameEl.placeholder = 'Tulis nama lengkap kamu...';
+      // Isi rincian pesanan
       const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
-      document.getElementById('qris-amount').textContent = fmt(total);
-      document.getElementById('tunai-amount').textContent = fmt(total);
       document.getElementById('payment-total').textContent = fmt(total);
       document.getElementById('payment-items').innerHTML = cart.map(item =>
         `<div class="order-detail-item"><span>${escHtml(item.name)}${item.variant ? ' · ' + escHtml(item.variant) : ''} ×${item.qty}</span><span>${fmt(item.price * item.qty)}</span></div>`
       ).join('');
       showScreen('screen-payment');
     }
-    function selectPayMethod(method) {
-      selectedPayMethod = method;
-      document.getElementById('btn-qris').classList.toggle('active', method === 'qris');
-      document.getElementById('btn-tunai').classList.toggle('active', method === 'tunai');
-      document.getElementById('detail-qris').classList.toggle('show', method === 'qris');
-      document.getElementById('detail-tunai').classList.toggle('show', method === 'tunai');
-    }
+    // selectPayMethod tidak dipakai lagi di Mode 1 (bayar langsung di kantin)
+    // Dibiarkan agar tidak error jika dipanggil dari kode lain
+    function selectPayMethod(method) { /* tidak dipakai di Mode 1 */ }
     async function confirmPayment() {
       const nameEl = document.getElementById('customer-name');
       const name = nameEl.value.trim();
       if (!name) { nameEl.classList.add('error'); nameEl.focus(); nameEl.placeholder = '⚠️ Nama harus diisi dulu ya!'; return; }
-      if (!selectedPayMethod) { showNotif('Pilih metode pembayaran dulu ya 😊'); return; }
+      // Mode 1: bayar langsung di kantin — tidak perlu pilih metode di app
+      // payment_method default 'tunai' (Mas Wawan yang catat)
       const btn = document.getElementById('confirm-btn');
       btn.disabled = true; btn.textContent = '⏳ Memproses...';
       try {
         const payload = {
           customer_name: name,
-          payment_method: selectedPayMethod,
+          payment_method: 'tunai', // bayar langsung di kantin
           items: cart.map(c => ({ menu_item_id: c.id, variant_name: c.variant || null, price: c.price, quantity: c.qty })),
         };
         const res = await apiFetch('/orders', { method: 'POST', body: JSON.stringify(payload) });
         lastOrderNum = res.order_number;
         document.getElementById('order-num').textContent = res.order_number;
         document.getElementById('success-name').textContent = name;
-        document.getElementById('success-method').textContent = selectedPayMethod === 'qris' ? '📱 QRIS' : '💵 Tunai';
+        document.getElementById('success-method').textContent = '🏪 Bayar di Kantin';
         cart = []; updateCartUI();
         showScreen('screen-success');
         // Reload menu agar stok terupdate
@@ -2172,7 +2857,7 @@
       }
     }
     function newOrder() {
-      cart = []; selectedPayMethod = null; lastOrderNum = null;
+      cart = []; lastOrderNum = null;
       const nameEl = document.getElementById('customer-name');
       if (nameEl) { nameEl.value = ''; nameEl.classList.remove('error'); }
       document.getElementById('search-input').value = '';

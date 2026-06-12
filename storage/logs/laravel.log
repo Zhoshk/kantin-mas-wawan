@@ -21,3 +21,6 @@
 #18 C:/Users/syury/kantin-mas-wawan/artisan(16): Illuminate/Foundation/Application->handleCommand(Object(Symfony/Component/Console/Input/ArgvInput))
 #19 {main}
 "} 
+[2026-06-09 03:14:51] local.INFO: [WA] Fonnte tidak dikonfigurasi — pesan tidak terkirim.  
+[2026-06-09 03:15:30] local.INFO: [WA] Fonnte tidak dikonfigurasi — pesan tidak terkirim.  
+[2026-06-09 03:21:22] local.INFO: [WA] Pesan terkirim ke 6282182340037  
