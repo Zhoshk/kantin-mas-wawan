@@ -14,9 +14,9 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->timestamp('wa_reminded_at')
-                  ->nullable()
-                  ->after('payment_method')
-                  ->comment('Kapan terakhir reminder WA dikirim untuk pesanan ini');
+                ->nullable()
+                ->after('payment_method')
+                ->comment('Kapan terakhir reminder WA dikirim untuk pesanan ini');
         });
     }
 

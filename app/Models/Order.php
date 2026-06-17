@@ -14,7 +14,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'total_price'    => 'integer',
+        'total_price' => 'integer',
         'wa_reminded_at' => 'datetime',
     ];
 
@@ -27,6 +27,7 @@ class Order extends Model
     {
         $last = self::latest()->first();
         $next = $last ? ((int) substr($last->order_number, 4)) + 1 : 1;
-        return 'ORD-' . str_pad($next, 3, '0', STR_PAD_LEFT);
+
+        return 'ORD-'.str_pad($next, 3, '0', STR_PAD_LEFT);
     }
 }

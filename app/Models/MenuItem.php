@@ -13,11 +13,11 @@ class MenuItem extends Model
     ];
 
     protected $casts = [
-        'is_hot'    => 'boolean',
+        'is_hot' => 'boolean',
         'is_active' => 'boolean',
-        'variants'  => 'array',
-        'price'     => 'integer',
-        'stock'     => 'integer',
+        'variants' => 'array',
+        'price' => 'integer',
+        'stock' => 'integer',
     ];
 
     public function orderItems(): HasMany

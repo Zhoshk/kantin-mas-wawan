@@ -23,7 +23,7 @@ class NotifyUnprocessedOrders extends Command
     public function handle(WhatsAppService $wa): int
     {
         $minutes = (int) $this->option('minutes');
-        $dryRun  = $this->option('dry-run');
+        $dryRun = $this->option('dry-run');
 
         $this->info("Mengecek pesanan yang belum diproses > {$minutes} menit...");
 
@@ -33,8 +33,8 @@ class NotifyUnprocessedOrders extends Command
         // - masuk lebih dari $minutes menit yang lalu
         // - belum pernah dikirim reminder (wa_reminded_at null)
         //   ATAU sudah lebih dari 15 menit sejak reminder terakhir
-        $cutoff  = Carbon::now('Asia/Jakarta')->subMinutes($minutes);
-        $remind  = Carbon::now('Asia/Jakarta')->subMinutes(15); // interval antar reminder
+        $cutoff = Carbon::now('Asia/Jakarta')->subMinutes($minutes);
+        $remind = Carbon::now('Asia/Jakarta')->subMinutes(15); // interval antar reminder
 
         $orders = Order::with('items')
             ->whereDate('created_at', today())                  // hanya hari ini
@@ -43,21 +43,22 @@ class NotifyUnprocessedOrders extends Command
             ->where('created_at', '<=', $cutoff)               // sudah > $minutes menit
             ->where(function ($q) use ($remind) {
                 $q->whereNull('wa_reminded_at')                 // belum pernah diremind
-                  ->orWhere('wa_reminded_at', '<=', $remind);  // atau sudah > 15 menit
+                    ->orWhere('wa_reminded_at', '<=', $remind);  // atau sudah > 15 menit
             })
             ->get();
 
         if ($orders->isEmpty()) {
             $this->info('Tidak ada pesanan yang perlu diingatkan. ✓');
+
             return self::SUCCESS;
         }
 
         $this->table(
             ['Order', 'Pelanggan', 'Total', 'Masuk', 'Terakhir Diingatkan'],
-            $orders->map(fn($o) => [
+            $orders->map(fn ($o) => [
                 $o->order_number,
                 $o->customer_name,
-                'Rp ' . number_format($o->total_price, 0, ',', '.'),
+                'Rp '.number_format($o->total_price, 0, ',', '.'),
                 Carbon::parse($o->created_at)->setTimezone('Asia/Jakarta')->format('H:i'),
                 $o->wa_reminded_at
                     ? Carbon::parse($o->wa_reminded_at)->setTimezone('Asia/Jakarta')->format('H:i')
@@ -67,6 +68,7 @@ class NotifyUnprocessedOrders extends Command
 
         if ($dryRun) {
             $this->warn('[DRY RUN] Pesan tidak dikirim.');
+
             return self::SUCCESS;
         }
 
@@ -75,7 +77,7 @@ class NotifyUnprocessedOrders extends Command
 
         if ($sent) {
             // Update wa_reminded_at supaya tidak spam
-            $orders->each(fn($o) => $o->update(['wa_reminded_at' => now()]));
+            $orders->each(fn ($o) => $o->update(['wa_reminded_at' => now()]));
             $this->info("✓ Reminder terkirim ke admin untuk {$orders->count()} pesanan.");
         } else {
             $this->error('✗ Gagal kirim reminder WA. Cek log Laravel.');

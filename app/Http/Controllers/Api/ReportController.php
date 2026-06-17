@@ -4,53 +4,53 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ReportController extends Controller
 {
     public function summary(Request $request): JsonResponse
     {
         $period = $request->period ?? 'daily';
-        $query  = Order::where('payment_status', 'paid')->where('status', '!=', 'cancelled');
+        $query = Order::where('payment_status', 'paid')->where('status', '!=', 'cancelled');
 
-        [$current, $previous] = match($period) {
-            'weekly'  => [now()->startOfWeek(), now()->subWeek()->startOfWeek()],
+        [$current, $previous] = match ($period) {
+            'weekly' => [now()->startOfWeek(), now()->subWeek()->startOfWeek()],
             'monthly' => [now()->startOfMonth(), now()->subMonth()->startOfMonth()],
-            default   => [now()->startOfDay(), now()->subDay()->startOfDay()],
+            default => [now()->startOfDay(), now()->subDay()->startOfDay()],
         };
 
-        $groupFormat = match($period) {
-            'weekly'  => '%Y-%u',
+        $groupFormat = match ($period) {
+            'weekly' => '%Y-%u',
             'monthly' => '%Y-%m',
-            default   => '%Y-%m-%d',
+            default => '%Y-%m-%d',
         };
 
-        $currentRevenue  = (clone $query)->where('created_at', '>=', $current)->sum('total_price');
+        $currentRevenue = (clone $query)->where('created_at', '>=', $current)->sum('total_price');
         $previousRevenue = (clone $query)->where('created_at', '>=', $previous)->where('created_at', '<', $current)->sum('total_price');
-        $currentOrders   = (clone $query)->where('created_at', '>=', $current)->count();
-        $previousOrders  = (clone $query)->where('created_at', '>=', $previous)->where('created_at', '<', $current)->count();
+        $currentOrders = (clone $query)->where('created_at', '>=', $current)->count();
+        $previousOrders = (clone $query)->where('created_at', '>=', $previous)->where('created_at', '<', $current)->count();
 
         $chartData = DB::table('orders')
             ->select(DB::raw("DATE_FORMAT(created_at, '$groupFormat') as period"), DB::raw('SUM(total_price) as revenue'), DB::raw('COUNT(*) as orders'))
             ->where('payment_status', 'paid')->where('status', '!=', 'cancelled')
-            ->when($period === 'daily',   fn($q) => $q->where('created_at', '>=', now()->subDays(30)))
-            ->when($period === 'weekly',  fn($q) => $q->where('created_at', '>=', now()->subWeeks(12)))
-            ->when($period === 'monthly', fn($q) => $q->where('created_at', '>=', now()->subMonths(12)))
+            ->when($period === 'daily', fn ($q) => $q->where('created_at', '>=', now()->subDays(30)))
+            ->when($period === 'weekly', fn ($q) => $q->where('created_at', '>=', now()->subWeeks(12)))
+            ->when($period === 'monthly', fn ($q) => $q->where('created_at', '>=', now()->subMonths(12)))
             ->groupBy('period')->orderBy('period')->get();
 
         return response()->json([
             'period' => $period,
             'current_revenue' => $currentRevenue, 'previous_revenue' => $previousRevenue,
-            'revenue_change'  => $previousRevenue > 0 ? round((($currentRevenue - $previousRevenue) / $previousRevenue) * 100, 1) : 0,
-            'current_orders'  => $currentOrders,  'previous_orders'  => $previousOrders,
-            'chart'           => $chartData,
+            'revenue_change' => $previousRevenue > 0 ? round((($currentRevenue - $previousRevenue) / $previousRevenue) * 100, 1) : 0,
+            'current_orders' => $currentOrders,  'previous_orders' => $previousOrders,
+            'chart' => $chartData,
         ]);
     }
 
@@ -63,8 +63,9 @@ class ReportController extends Controller
             ->where('orders.payment_status', 'paid')->where('orders.status', '!=', 'cancelled')
             ->groupBy('menu_items.category')->get();
 
-        $total  = $data->sum('revenue');
-        $result = $data->map(fn($d) => [...(array) $d, 'percentage' => $total > 0 ? round(($d->revenue / $total) * 100, 1) : 0]);
+        $total = $data->sum('revenue');
+        $result = $data->map(fn ($d) => [...(array) $d, 'percentage' => $total > 0 ? round(($d->revenue / $total) * 100, 1) : 0]);
+
         return response()->json(['data' => $result, 'total_revenue' => $total]);
     }
 
@@ -77,23 +78,25 @@ class ReportController extends Controller
             ->where('orders.payment_status', 'paid')->where('orders.status', '!=', 'cancelled')
             ->groupBy('menu_items.id', 'menu_items.name', 'menu_items.emoji', 'menu_items.category')
             ->orderByDesc('qty_sold')->limit(10)->get();
+
         return response()->json(['data' => $data]);
     }
 
     public function orders(Request $request): JsonResponse
     {
         $query = Order::with('items')
-            ->when($request->from,   fn($q) => $q->whereDate('created_at', '>=', $request->from))
-            ->when($request->to,     fn($q) => $q->whereDate('created_at', '<=', $request->to))
-            ->when($request->status, fn($q) => $q->where('status', $request->status))
+            ->when($request->from, fn ($q) => $q->whereDate('created_at', '>=', $request->from))
+            ->when($request->to, fn ($q) => $q->whereDate('created_at', '<=', $request->to))
+            ->when($request->status, fn ($q) => $q->where('status', $request->status))
             ->latest();
+
         return response()->json($query->paginate(50));
     }
 
     public function export(Request $request)
     {
         $from = $request->from ?? now()->startOfMonth()->toDateString();
-        $to   = $request->to   ?? now()->toDateString();
+        $to = $request->to ?? now()->toDateString();
         $type = $request->type ?? 'excel';
 
         $orders = Order::with('items')->whereDate('created_at', '>=', $from)->whereDate('created_at', '<=', $to)->where('status', '!=', 'cancelled')->get();
@@ -111,18 +114,18 @@ class ReportController extends Controller
 
     private function exportXlsx($orders, $categoryReport, $from, $to)
     {
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet()->setTitle('Laporan Kantin');
         $sheet = $spreadsheet->getActiveSheet();
 
-        $red    = ['font' => ['bold'=>true,'color'=>['rgb'=>'FFFFFF'],'size'=>12], 'fill' => ['fillType'=>Fill::FILL_SOLID,'startColor'=>['rgb'=>'DA291C']], 'alignment' => ['horizontal'=>Alignment::HORIZONTAL_CENTER]];
-        $dark   = ['font' => ['bold'=>true,'color'=>['rgb'=>'FFFFFF']], 'fill' => ['fillType'=>Fill::FILL_SOLID,'startColor'=>['rgb'=>'333333']], 'alignment' => ['horizontal'=>Alignment::HORIZONTAL_CENTER]];
-        $yellow = ['font' => ['bold'=>true], 'fill' => ['fillType'=>Fill::FILL_SOLID,'startColor'=>['rgb'=>'FFC72C']]];
-        $border = ['borders' => ['allBorders' => ['borderStyle'=>Border::BORDER_THIN,'color'=>['rgb'=>'DDDDDD']]]];
+        $red = ['font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF'], 'size' => 12], 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'DA291C']], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]];
+        $dark = ['font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']], 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '333333']], 'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]];
+        $yellow = ['font' => ['bold' => true], 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => 'FFC72C']]];
+        $border = ['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => 'DDDDDD']]]];
 
-        $totalRevenue = $orders->where('payment_status','paid')->sum('total_price');
-        $totalOrders  = $orders->count();
-        $avgOrder     = $totalOrders > 0 ? round($totalRevenue / $totalOrders) : 0;
+        $totalRevenue = $orders->where('payment_status', 'paid')->sum('total_price');
+        $totalOrders = $orders->count();
+        $avgOrder = $totalOrders > 0 ? round($totalRevenue / $totalOrders) : 0;
 
         $row = 1;
         $sheet->mergeCells("A{$row}:F{$row}");
@@ -132,7 +135,7 @@ class ReportController extends Controller
         $row++;
 
         $sheet->mergeCells("A{$row}:F{$row}");
-        $sheet->setCellValue("A{$row}", "Periode: {$from} s/d {$to}   |   Dicetak: " . now()->format('d/m/Y H:i'));
+        $sheet->setCellValue("A{$row}", "Periode: {$from} s/d {$to}   |   Dicetak: ".now()->format('d/m/Y H:i'));
         $sheet->getStyle("A{$row}")->getFont()->setItalic(true);
         $sheet->getStyle("A{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $row += 2;
@@ -142,8 +145,9 @@ class ReportController extends Controller
         $sheet->setCellValue("A{$row}", 'RINGKASAN');
         $sheet->getStyle("A{$row}")->applyFromArray($yellow);
         $row++;
-        foreach ([['Total Pendapatan','Rp '.number_format($totalRevenue,0,',','.')],['Total Pesanan',$totalOrders],['Rata-rata/Pesanan','Rp '.number_format($avgOrder,0,',','.')]] as [$l,$v]) {
-            $sheet->setCellValue("A{$row}",$l); $sheet->setCellValue("B{$row}",$v);
+        foreach ([['Total Pendapatan', 'Rp '.number_format($totalRevenue, 0, ',', '.')], ['Total Pesanan', $totalOrders], ['Rata-rata/Pesanan', 'Rp '.number_format($avgOrder, 0, ',', '.')]] as [$l,$v]) {
+            $sheet->setCellValue("A{$row}", $l);
+            $sheet->setCellValue("B{$row}", $v);
             $sheet->getStyle("A{$row}")->getFont()->setBold(true);
             $row++;
         }
@@ -154,15 +158,17 @@ class ReportController extends Controller
         $sheet->setCellValue("A{$row}", 'REKAP PER KATEGORI');
         $sheet->getStyle("A{$row}")->applyFromArray($yellow);
         $row++;
-        foreach (['Kategori','Terjual (qty)','Pendapatan','Persentase'] as $i=>$h) $sheet->setCellValue(chr(65+$i).$row,$h);
+        foreach (['Kategori', 'Terjual (qty)', 'Pendapatan', 'Persentase'] as $i => $h) {
+            $sheet->setCellValue(chr(65 + $i).$row, $h);
+        }
         $sheet->getStyle("A{$row}:D{$row}")->applyFromArray($dark);
         $row++;
         foreach ($categoryReport as $cat) {
-            $pct = $totalRevenue > 0 ? round(($cat->revenue/$totalRevenue)*100,1) : 0;
-            $sheet->setCellValue("A{$row}",ucfirst($cat->category));
-            $sheet->setCellValue("B{$row}",$cat->qty);
-            $sheet->setCellValue("C{$row}",'Rp '.number_format($cat->revenue,0,',','.'));
-            $sheet->setCellValue("D{$row}",$pct.'%');
+            $pct = $totalRevenue > 0 ? round(($cat->revenue / $totalRevenue) * 100, 1) : 0;
+            $sheet->setCellValue("A{$row}", ucfirst($cat->category));
+            $sheet->setCellValue("B{$row}", $cat->qty);
+            $sheet->setCellValue("C{$row}", 'Rp '.number_format($cat->revenue, 0, ',', '.'));
+            $sheet->setCellValue("D{$row}", $pct.'%');
             $sheet->getStyle("A{$row}:D{$row}")->applyFromArray($border);
             $row++;
         }
@@ -173,57 +179,67 @@ class ReportController extends Controller
         $sheet->setCellValue("A{$row}", 'RIWAYAT PESANAN');
         $sheet->getStyle("A{$row}")->applyFromArray($yellow);
         $row++;
-        foreach (['No. Pesanan','Nama','Total','Status','Pembayaran','Tanggal'] as $i=>$h) $sheet->setCellValue(chr(65+$i).$row,$h);
+        foreach (['No. Pesanan', 'Nama', 'Total', 'Status', 'Pembayaran', 'Tanggal'] as $i => $h) {
+            $sheet->setCellValue(chr(65 + $i).$row, $h);
+        }
         $sheet->getStyle("A{$row}:F{$row}")->applyFromArray($dark);
         $row++;
-        foreach ($orders as $i=>$o) {
-            $sheet->setCellValue("A{$row}",$o->order_number);
-            $sheet->setCellValue("B{$row}",$o->customer_name);
-            $sheet->setCellValue("C{$row}",'Rp '.number_format($o->total_price,0,',','.'));
-            $sheet->setCellValue("D{$row}",$o->status);
-            $sheet->setCellValue("E{$row}",$o->payment_status);
-            $sheet->setCellValue("F{$row}",$o->created_at->format('d/m/Y H:i'));
-            if ($i%2===0) $sheet->getStyle("A{$row}:F{$row}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('F9F9F9');
+        foreach ($orders as $i => $o) {
+            $sheet->setCellValue("A{$row}", $o->order_number);
+            $sheet->setCellValue("B{$row}", $o->customer_name);
+            $sheet->setCellValue("C{$row}", 'Rp '.number_format($o->total_price, 0, ',', '.'));
+            $sheet->setCellValue("D{$row}", $o->status);
+            $sheet->setCellValue("E{$row}", $o->payment_status);
+            $sheet->setCellValue("F{$row}", $o->created_at->format('d/m/Y H:i'));
+            if ($i % 2 === 0) {
+                $sheet->getStyle("A{$row}:F{$row}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('F9F9F9');
+            }
             $sheet->getStyle("A{$row}:F{$row}")->applyFromArray($border);
             $row++;
         }
 
-        foreach (['A'=>22,'B'=>22,'C'=>20,'D'=>14,'E'=>14,'F'=>20] as $col=>$w) $sheet->getColumnDimension($col)->setWidth($w);
+        foreach (['A' => 22, 'B' => 22, 'C' => 20, 'D' => 14, 'E' => 14, 'F' => 20] as $col => $w) {
+            $sheet->getColumnDimension($col)->setWidth($w);
+        }
 
         $filename = "laporan-kantin-{$from}-{$to}.xlsx";
-        $writer   = new Xlsx($spreadsheet);
-        ob_start(); $writer->save('php://output'); $content = ob_get_clean();
+        $writer = new Xlsx($spreadsheet);
+        ob_start();
+        $writer->save('php://output');
+        $content = ob_get_clean();
 
         return response($content, 200, [
-            'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-            'Cache-Control'       => 'max-age=0',
+            'Cache-Control' => 'max-age=0',
         ]);
     }
 
     private function exportPdf($orders, $categoryReport, $from, $to)
     {
-        $totalRevenue = $orders->where('payment_status','paid')->sum('total_price');
-        $totalOrders  = $orders->count();
-        $avgOrder     = $totalOrders > 0 ? round($totalRevenue / $totalOrders) : 0;
-        $printDate    = now()->format('d/m/Y H:i');
-        $fmtRevenue   = 'Rp ' . number_format($totalRevenue, 0, ',', '.');
-        $fmtAvg       = 'Rp ' . number_format($avgOrder, 0, ',', '.');
+        $totalRevenue = $orders->where('payment_status', 'paid')->sum('total_price');
+        $totalOrders = $orders->count();
+        $avgOrder = $totalOrders > 0 ? round($totalRevenue / $totalOrders) : 0;
+        $printDate = now()->format('d/m/Y H:i');
+        $fmtRevenue = 'Rp '.number_format($totalRevenue, 0, ',', '.');
+        $fmtAvg = 'Rp '.number_format($avgOrder, 0, ',', '.');
 
-        $catRows = $categoryReport->map(function($c) use ($totalRevenue) {
-            $pct = $totalRevenue > 0 ? round(($c->revenue/$totalRevenue)*100,1) : 0;
+        $catRows = $categoryReport->map(function ($c) use ($totalRevenue) {
+            $pct = $totalRevenue > 0 ? round(($c->revenue / $totalRevenue) * 100, 1) : 0;
             $cat = ucfirst($c->category);
             $qty = number_format($c->qty);
-            $rev = 'Rp ' . number_format($c->revenue,0,',','.');
+            $rev = 'Rp '.number_format($c->revenue, 0, ',', '.');
+
             return "<tr><td>{$cat}</td><td style='text-align:right'>{$qty}</td><td style='text-align:right'>{$rev}</td><td style='text-align:right'>{$pct}%</td></tr>";
         })->implode('');
 
-        $orderRows = $orders->take(200)->map(function($o) {
-            $num   = $o->order_number;
-            $name  = htmlspecialchars($o->customer_name);
-            $total = 'Rp ' . number_format($o->total_price,0,',','.');
-            $date  = $o->created_at->format('d/m/Y H:i');
-            $st    = $o->status;
+        $orderRows = $orders->take(200)->map(function ($o) {
+            $num = $o->order_number;
+            $name = htmlspecialchars($o->customer_name);
+            $total = 'Rp '.number_format($o->total_price, 0, ',', '.');
+            $date = $o->created_at->format('d/m/Y H:i');
+            $st = $o->status;
+
             return "<tr><td>{$num}</td><td>{$name}</td><td style='text-align:right'>{$total}</td><td><span class='badge badge-{$st}'>{$st}</span></td><td>{$date}</td></tr>";
         })->implode('');
 

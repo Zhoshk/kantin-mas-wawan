@@ -13,7 +13,7 @@ class OrderItem extends Model
     ];
 
     protected $casts = [
-        'price'    => 'integer',
+        'price' => 'integer',
         'subtotal' => 'integer',
         'quantity' => 'integer',
     ];

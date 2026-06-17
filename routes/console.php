@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
@@ -38,5 +39,5 @@ Schedule::command('wa:daily-summary')
 
 // Bawaan Laravel
 Artisan::command('inspire', function () {
-    $this->comment(\Illuminate\Foundation\Inspiring::quote());
+    $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');

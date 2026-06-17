@@ -1560,9 +1560,9 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      padding: 20px 16px;
+      padding: 20px 16px 16px;
       flex: 1;
-      justify-content: center;
+      justify-content: flex-start;
     }
     .mode-card {
       background: white;
@@ -1632,6 +1632,7 @@
       outline: none;
       transition: border-color 0.2s;
       box-sizing: border-box;
+
     }
     .ext-input:focus, .ext-textarea:focus { border-color: #3b82f6; }
     .ext-input.error, .ext-textarea.error { border-color: var(--red); background: var(--red-light); }
@@ -1776,6 +1777,8 @@
       margin-bottom: 6px;
       display: block;
     }
+    .ext-input::placeholder,
+    .ext-textarea::placeholder { color: #bbb; }
     .ext-input {
       width: 100%;
       padding: 13px 16px;
@@ -1924,7 +1927,7 @@
           <div class="mode-info">
             <div class="mode-title">Order Makanan Luar</div>
             <div class="mode-desc">Pesan makanan dari restoran atau warung luar. Mas Wawan yang belikan.</div>
-            <span class="mode-badge badge-blue">⏰ Order sebelum jam <span id="home-ext-cutoff">10.00</span></span>
+            <span class="mode-badge badge-blue">⏰ Order sebelum jam <span id="home-ext-cutoff">11.00</span></span>
           </div>
         </div>
       </div>
@@ -1941,7 +1944,11 @@
               <p>📍 Lantai 5 — Gade Tower IT Security</p>
             </div>
           </div>
-          <button onclick="toggleModeSelector()" title="Order Makanan Luar" style="width:40px;height:40px;background:rgba(255,255,255,0.25);border:none;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0;">🍱</button>
+          <div onclick="goMode('luar')" title="Order Makanan Luar"
+            style="width:44px;height:44px;background:rgba(255,255,255,0.25);border-radius:50%;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;margin-right:6px;flex-shrink:0;transition:background 0.2s;user-select:none;-webkit-user-select:none;"
+            onmouseover="this.style.background='rgba(255,255,255,0.45)';this.style.transform='scale(1.08)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.25)';this.style.transform='scale(1)'"
+            >🍱</div>
           <button class="cart-btn" onclick="goToCart()">
             <svg viewBox="0 0 24 24">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -1994,7 +2001,7 @@
           <div class="mode-card-info">
             <div class="mode-card-title">Order Makanan Luar</div>
             <div class="mode-card-desc">Pesan dari restoran, Mas Wawan yang belikan</div>
-            <span class="mode-card-badge badge-green" id="ext-mode-badge">⏰ Buka s/d jam 10.00</span>
+            <span class="mode-card-badge badge-green" id="ext-mode-badge">⏰ Buka s/d jam 11.00</span>
           </div>
           <div class="mode-card-arrow">›</div>
         </div>
@@ -2073,14 +2080,7 @@
           </div>
         </div>
 
-        <!-- QR Merchant (opsional, dari file qris.png) -->
-        <div class="qris-mini-wrap" id="qris-mini-wrap">
-          <div class="qris-mini-label">📱 QR Merchant Kantin</div>
-          <img src="/qris.png" alt="QR Merchant"
-            style="width:160px;height:160px;object-fit:contain;border-radius:8px;"
-            onerror="this.parentElement.style.display='none'">
-          <div class="qris-mini-hint">Scan QR ini saat mengambil pesanan di kantin</div>
-        </div>
+        <!-- QR dihapus sesuai permintaan — bayar langsung scan QR fisik di kantin -->
 
       </div>
       <div class="done-wrap">
@@ -2135,76 +2135,6 @@
     </div>
 
     <!-- SCREEN ORDER LUAR -->
-    <div class="screen" id="screen-ext-order">
-      <div class="screen-header">
-        <button class="back-btn" onclick="showScreen('screen-home')">
-          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <div class="screen-title">Order Makanan Luar 🍱</div>
-      </div>
-      <div class="ext-content">
-        <div class="ext-closed-banner" id="ext-closed-banner">
-          🔒 Order makanan luar sudah ditutup<br>
-          <span style="font-size:11px;font-weight:600">Buka kembali besok sebelum jam <span id="ext-cutoff-text">10.00</span></span>
-        </div>
-        <div class="ext-cutoff-info">
-          ⏰ Order hanya bisa dilakukan <strong>sebelum jam <span id="ext-cutoff-label">10.00</span> pagi</strong>. Mas Wawan akan belikan saat jam makan siang.
-        </div>
-        <div class="ext-form-group">
-          <label class="ext-label">👤 Nama Kamu *</label>
-          <input class="ext-input" type="text" id="ext-name" placeholder="Tulis nama lengkap..." maxlength="100" autocomplete="name">
-        </div>
-        <div class="ext-form-group">
-          <label class="ext-label">🏠 Nama Restoran / Warung *</label>
-          <input class="ext-input" type="text" id="ext-restaurant" placeholder="Contoh: Warung Bu Sari, McD Blok M..." maxlength="200">
-        </div>
-        <div class="ext-form-group">
-          <label class="ext-label">📋 Daftar Pesanan *</label>
-          <textarea class="ext-textarea" id="ext-items" placeholder="Tulis satu pesanan per baris, contoh:&#10;Nasi gudeg + ayam&#10;Es teh manis&#10;Tempe goreng 2 porsi" maxlength="1000"></textarea>
-          <span class="ext-hint">💡 Tulis satu item per baris agar mudah dibaca Mas Wawan</span>
-        </div>
-        <div class="ext-form-group">
-          <label class="ext-label">💰 Estimasi Harga (opsional)</label>
-          <input class="ext-input" type="number" id="ext-price" placeholder="Contoh: 25000" min="0">
-          <span class="ext-hint">Bantu Mas Wawan menyiapkan uang yang tepat</span>
-        </div>
-        <div class="ext-form-group">
-          <label class="ext-label">📝 Catatan Tambahan (opsional)</label>
-          <input class="ext-input" type="text" id="ext-notes" placeholder="Contoh: Pedasnya sedang, jangan pakai bawang..." maxlength="500">
-        </div>
-      </div>
-      <div class="done-wrap">
-        <button class="ext-submit-btn" id="ext-submit-btn" onclick="submitExtOrder()">
-          📲 Kirim Order ke Mas Wawan
-        </button>
-      </div>
-    </div>
-
-    <!-- SCREEN SUCCESS ORDER LUAR -->
-    <div class="screen" id="screen-ext-success">
-      <div class="ext-success-content">
-        <div class="ext-success-icon">🎉</div>
-        <h2 style="font-size:26px;font-weight:900;margin-bottom:8px;">Order Diterima!</h2>
-        <p style="font-size:14px;color:var(--text2);line-height:1.6;max-width:280px">
-          Mas Wawan sudah mendapat notifikasi WA. Pesananmu akan dibelikan saat jam makan siang.
-        </p>
-        <div class="ext-order-box">
-          <small>NOMOR ORDER</small>
-          <span id="ext-order-num">EXT-001</span>
-        </div>
-        <div class="ext-info-box">
-          🏠 <strong>Restoran:</strong> <span id="ext-success-resto">—</span><br>
-          👤 <strong>Pemesan:</strong> <span id="ext-success-name">—</span><br>
-          💰 <strong>Est. Harga:</strong> <span id="ext-success-price">—</span><br><br>
-          📌 Bayar ke Mas Wawan saat menerima pesanan ya!
-        </div>
-      </div>
-      <div class="done-wrap">
-        <button class="ext-new-btn" onclick="newExtOrder()">🍱 Order Lagi</button>
-        <button class="new-order-btn" style="margin-top:8px" onclick="showScreen('screen-home')">🏠 Ke Halaman Utama</button>
-      </div>
-    </div>
-
     <!-- VARIANT MODAL -->
     <!-- VARIANT PAGE — full screen GoFood style -->
     <div class="modal-overlay" id="modal-overlay">
@@ -2243,14 +2173,13 @@
         </button>
       </div>
     </div>
-  </div>
 
     <!-- ══════════════════════════════════════════════════ -->
     <!-- SCREEN: ORDER MAKANAN LUAR                        -->
     <!-- ══════════════════════════════════════════════════ -->
     <div class="screen" id="screen-ext-order">
       <div class="screen-header">
-        <button class="back-btn" onclick="showScreen('screen-menu')">
+        <button class="back-btn" onclick="showScreen('screen-home')">
           <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div class="screen-title">🍱 Order Makanan Luar</div>
@@ -2273,7 +2202,7 @@
         </div>
         <div>
           <label class="ext-section-title">📋 Daftar Pesanan *</label>
-          <textarea class="ext-textarea" id="ext-items" placeholder="Tulis satu menu per baris:&#10;&#10;Nasi Gudeg + Ayam Goreng&#10;Es Teh Manis&#10;Kerupuk" maxlength="800"></textarea>
+          <textarea class="ext-textarea" id="ext-items" placeholder="Tulis satu menu per baris:&#10;&#10;- Nasi Gudeg + Ayam Goreng&#10;- Es Teh Manis&#10;- Kerupuk" maxlength="800"></textarea>
           <div class="ext-textarea-hint">💡 Satu baris = satu item. Boleh tambah catatan spesifik per item.</div>
         </div>
         <div>
@@ -2317,9 +2246,12 @@
       </div>
       <div class="done-wrap">
         <button class="ext-submit-btn" onclick="newExtOrder()">🍱 Order Lagi</button>
-        <button class="new-order-btn" onclick="showScreen('screen-menu')" style="margin-top:8px;">🏪 Kembali ke Kantin</button>
+        <button class="new-order-btn" onclick="showScreen('screen-home')" style="margin-top:8px;">🏠 Ke Halaman Utama</button>
       </div>
     </div>
+
+  </div><!-- /.app -->
+
   <script>
     const API_BASE = '/api';
     let allMenuItems = [], cart = [], currentCat = 'all', searchQuery = '';
@@ -2340,6 +2272,20 @@
       hideModeSelector();
       showScreen('screen-ext-order');
       loadExtCutoff();
+    }
+
+    // ── MODE SELECTOR ────────────────────────────────────────────────────
+    function goMode(mode) {
+      if (mode === 'kantin') {
+        // Masuk ke screen menu kantin
+        showScreen('screen-menu');
+        checkCutoff();
+        loadMenu();
+      } else if (mode === 'luar') {
+        // Masuk ke screen order makanan luar
+        showScreen('screen-ext-order');
+        loadExtCutoff();
+      }
     }
 
     // ── EXTERNAL ORDER ───────────────────────────────────────────────────

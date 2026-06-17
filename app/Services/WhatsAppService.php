@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\ExternalOrder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -63,7 +64,7 @@ class WhatsAppService
     // ═════════════════════════════════════════════════════════════════════════
 
     /**
-     * Notifikasi pesanan baru masuk — dikirim saat pelanggan checkout.
+     * Notifikasi pesanan kantin baru masuk.
      */
     public function notifyNewOrder(Order $order): bool
     {
@@ -73,12 +74,11 @@ class WhatsAppService
         $method = strtoupper($order->payment_method ?? 'TUNAI');
         $emoji  = $order->payment_method === 'qris' ? '📱' : '💵';
 
-        // ── Daftar item (dengan nomor urut, nama, qty, harga satuan, subtotal)
         $itemLines = $order->items->map(function ($item, $idx) {
-            $name    = $item->item_name . ($item->variant_name ? " ({$item->variant_name})" : '');
-            $harga   = $this->rupiah($item->price);
-            $sub     = $this->rupiah($item->subtotal);
-            $no      = $idx + 1;
+            $name  = $item->item_name . ($item->variant_name ? " ({$item->variant_name})" : '');
+            $harga = $this->rupiah($item->price);
+            $sub   = $this->rupiah($item->subtotal);
+            $no    = $idx + 1;
             return "{$no}. {$name}\n"
                  . "   {$item->quantity} × {$harga} = *{$sub}*";
         })->implode("\n");
@@ -95,18 +95,47 @@ class WhatsAppService
              . "{$itemLines}\n\n"
              . "━━━━━━━━━━━━━━━━━━━━\n"
              . "💰 *TOTAL: {$total}*\n"
-             . "✅ *Sudah Dibayar*\n"
+             . "✅ *Bayar Langsung di Kantin*\n"
              . "━━━━━━━━━━━━━━━━━━━━\n"
-             . "_Segera beli & siapkan pesanan ini! 🏃_";
+             . "_Segera siapkan pesanan ini! 🏃_";
 
         return $this->sendToAdmin($msg);
     }
 
     /**
-     * Reminder jika pesanan belum diproses setelah beberapa menit.
-     * Dipanggil oleh Artisan command terjadwal.
-     *
-     * @param  \Illuminate\Support\Collection<Order>  $orders
+     * Notifikasi order makanan luar baru.
+     */
+    public function notifyExternalOrder(ExternalOrder $order): bool
+    {
+        $time = Carbon::now('Asia/Jakarta')->format('H:i');
+        $est  = $order->estimated_price
+            ? $this->rupiah($order->estimated_price)
+            : 'Belum diestimasi';
+
+        $msg = "🍱 *ORDER MAKANAN LUAR — {$order->order_number}*\n"
+             . "━━━━━━━━━━━━━━━━━━━━\n"
+             . "👤 Pemesan : *{$order->customer_name}*\n"
+             . "🏠 Restoran: *{$order->restaurant_name}*\n"
+             . "🕐 Jam     : {$time} WIB\n"
+             . "━━━━━━━━━━━━━━━━━━━━\n"
+             . "📋 *PESANAN:*\n"
+             . "{$order->items_text}\n";
+
+        if ($order->notes) {
+            $msg .= "━━━━━━━━━━━━━━━━━━━━\n"
+                 . "💬 Catatan: {$order->notes}\n";
+        }
+
+        $msg .= "━━━━━━━━━━━━━━━━━━━━\n"
+             . "💰 Est. Harga: {$est}\n"
+             . "━━━━━━━━━━━━━━━━━━━━\n"
+             . "_Tolong dibelikan ya Mas Wawan 🙏_";
+
+        return $this->sendToAdmin($msg);
+    }
+
+    /**
+     * Reminder jika pesanan belum diproses.
      */
     public function notifyUnprocessedReminder(\Illuminate\Support\Collection $orders): bool
     {
@@ -117,8 +146,8 @@ class WhatsAppService
         $now      = Carbon::now('Asia/Jakarta')->format('H:i');
 
         $orderLines = $orders->map(function ($order) {
-            $age      = Carbon::parse($order->created_at)->diffForHumans(null, true);
-            $items    = $order->items->map(fn($i) =>
+            $age   = Carbon::parse($order->created_at)->diffForHumans(null, true);
+            $items = $order->items->map(fn($i) =>
                 "   • " . $i->item_name
                     . ($i->variant_name ? " ({$i->variant_name})" : '')
                     . " ×{$i->quantity} — " . $this->rupiah($i->subtotal)
@@ -142,17 +171,16 @@ class WhatsAppService
     }
 
     /**
-     * Notifikasi ringkasan harian — opsional, bisa dijadwal jam tutup.
+     * Ringkasan harian.
      */
     public function notifyDailySummary(array $summary): bool
     {
-        $date     = Carbon::today('Asia/Jakarta')->translatedFormat('d F Y');
-        $total    = $this->rupiah($summary['total_revenue'] ?? 0);
-        $orders   = $summary['total_orders'] ?? 0;
-        $done     = $summary['completed'] ?? 0;
+        $date      = Carbon::today('Asia/Jakarta')->translatedFormat('d F Y');
+        $total     = $this->rupiah($summary['total_revenue'] ?? 0);
+        $orders    = $summary['total_orders'] ?? 0;
+        $done      = $summary['completed'] ?? 0;
         $cancelled = $summary['cancelled'] ?? 0;
 
-        // Top 3 menu terlaris
         $topLines = '';
         if (!empty($summary['top_items'])) {
             $topLines = "\n\n🏆 *TOP MENU HARI INI:*\n"
